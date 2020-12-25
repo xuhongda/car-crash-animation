@@ -64,7 +64,7 @@ public class CarCrashController extends HttpServlet {
                 response.setContentType("text/html;charset=utf-8");
                 response.getWriter().println(s);
             }catch (Exception e){
-                log.warn("访问异常");
+                log.warn("get crash point error");
                 log.warn("exception",e);
             }
 
