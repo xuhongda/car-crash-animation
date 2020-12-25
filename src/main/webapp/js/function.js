@@ -10,11 +10,11 @@ let biasX = 0,
   biasY = 0,
   biasZ = 0;
 
-document.querySelector('#biasBtn').onclick = function () {
+/*document.querySelector('#biasBtn').onclick = function () {
   biasY = Y_axle.innerHTML.split('°')[0] * 1
   biasZ = Z_axle.innerHTML.split('°')[0] * 1
   biasX = X_axle.innerHTML.split('°')[0] * 1
-}
+}*/
 
 
 

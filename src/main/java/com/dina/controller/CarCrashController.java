@@ -55,15 +55,21 @@ public class CarCrashController extends HttpServlet {
             post.setHeader("Content-Type", "application/json;charset=utf8");
             StringEntity stringEntity = new StringEntity(params);
             post.setEntity(stringEntity);
-            CloseableHttpResponse httpResponse = httpClient.execute(post);
+            try{
+                CloseableHttpResponse httpResponse = httpClient.execute(post);
 
-            HttpEntity entity = httpResponse.getEntity();
-            String s = EntityUtils.toString(entity);
-            //写回去
-            response.setContentType("text/html;charset=utf-8");
-            response.getWriter().println(s);
+                HttpEntity entity = httpResponse.getEntity();
+                String s = EntityUtils.toString(entity);
+                //写回去
+                response.setContentType("text/html;charset=utf-8");
+                response.getWriter().println(s);
+            }catch (Exception e){
+                log.warn("访问异常");
+                log.warn("exception",e);
+            }
+
         }else {
-            log.info("deviceId is null can't get crash data!");
+            log.warn("deviceId is null can't get crash data!");
         }
 
     }
