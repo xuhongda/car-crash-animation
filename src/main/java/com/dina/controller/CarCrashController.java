@@ -2,16 +2,13 @@ package com.dina.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +27,11 @@ import java.util.Map;
 @WebServlet("/carCrash")
 public class CarCrashController extends HttpServlet {
 
+    private CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-
 
     }
 
@@ -48,8 +46,7 @@ public class CarCrashController extends HttpServlet {
             map.put("key",deviceId);
             ObjectMapper mapper = new ObjectMapper();
             String params = mapper.writeValueAsString(map);
-
-            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+            //start a request ...
             HttpPost post = new HttpPost();
             post.setURI(URI.create("http://localhost:8017/car"));
             post.setHeader("Content-Type", "application/json;charset=utf8");
@@ -57,7 +54,6 @@ public class CarCrashController extends HttpServlet {
             post.setEntity(stringEntity);
             try{
                 CloseableHttpResponse httpResponse = httpClient.execute(post);
-
                 HttpEntity entity = httpResponse.getEntity();
                 String s = EntityUtils.toString(entity);
                 //写回去
@@ -66,8 +62,9 @@ public class CarCrashController extends HttpServlet {
             }catch (Exception e){
                 log.warn("get crash point error");
                 log.warn("exception",e);
+            }finally {
+                httpClient.close();
             }
-
         }else {
             log.warn("deviceId is null can't get crash data!");
         }
