@@ -54,12 +54,15 @@ public class CarCrashController extends HttpServlet {
                 CloseableHttpResponse httpResponse = httpClient.execute(post);
                 HttpEntity entity = httpResponse.getEntity();
                 String s = EntityUtils.toString(entity);
+                log.info("point = {}",s);
                 //写回去
                 response.setContentType("text/html;charset=utf-8");
                 response.getWriter().println(s);
             }catch (Exception e){
                 log.warn("get crash point error");
                 log.warn("exception",e);
+            }finally {
+                httpClient.close();
             }
 
         }else {
