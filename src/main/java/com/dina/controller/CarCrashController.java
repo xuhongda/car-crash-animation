@@ -6,20 +6,20 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author xuhongda on 2020/12/24
@@ -30,13 +30,7 @@ import java.util.Map;
 @WebServlet("/carCrash")
 public class CarCrashController extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-
-
-    }
-
+    Properties properties = new Properties();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
@@ -51,13 +45,13 @@ public class CarCrashController extends HttpServlet {
 
             CloseableHttpClient httpClient = HttpClientBuilder.create().build();
             HttpPost post = new HttpPost();
-            post.setURI(URI.create("http://localhost:8017/car"));
             post.setHeader("Content-Type", "application/json;charset=utf8");
             StringEntity stringEntity = new StringEntity(params);
             post.setEntity(stringEntity);
             try{
+                String url = getConfig("url");
+                post.setURI(URI.create(url));
                 CloseableHttpResponse httpResponse = httpClient.execute(post);
-
                 HttpEntity entity = httpResponse.getEntity();
                 String s = EntityUtils.toString(entity);
                 //写回去
@@ -74,4 +68,19 @@ public class CarCrashController extends HttpServlet {
 
     }
 
+    /**
+     * get config params
+     * @param name config's name
+     * @return config's value
+     */
+   private String getConfig(String name) throws IOException {
+       String path ="/config.properties";
+       InputStream resourceAsStream = this.getClass().getResourceAsStream(path);
+       properties.load(resourceAsStream);
+       return properties.getProperty(name);
+    }
+
+
+
 }
+
