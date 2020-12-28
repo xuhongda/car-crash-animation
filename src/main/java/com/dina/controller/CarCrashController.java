@@ -1,8 +1,6 @@
 package com.dina.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -10,6 +8,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +26,13 @@ import java.util.Properties;
  * com.dina.controller
  * car-crash-animation
  */
-@Slf4j
+
 @WebServlet("/carCrash")
 public class CarCrashController extends HttpServlet {
 
-    Properties properties = new Properties();
+    private Properties properties = new Properties();
 
+    private Logger log = LoggerFactory.getLogger(CarCrashController.class);
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
 
