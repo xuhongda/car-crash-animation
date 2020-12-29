@@ -476,30 +476,71 @@
 
     var deviceId = getUrlParam('deviceId');
 
+    /*获取该deviceId下碰撞点集合*/
     $.ajax({
         url:"./carCrash" ,
         type:"POST",
         dataType:"json",
         data:{"deviceId":deviceId},
         success:function (data) {
-        console.log("XXCC="+data);
+        console.log("point list = "+data);
         }
     });
 
+    /*碰撞点经纬度*/
+   /* var longitude;
+    var latitude;
+    $.ajax({
+        url:"./getCarCrashPoint" ,
+        type:"POST",
+        dataType:"json",
+        data:{"deviceId":"81044301899","eventLogId":"2c9481f6734d8a1801736e24989a2fd1"},
+        success:function (data) {
+            console.log("XXCC="+data);
+            longitude =  data.detail.longitude;
+            latitude =  data.detail.latitude;
+        }
+    });*/
 
+   /*过滤点*/
+    var  filterPoints = [];
+    for (let j = 0; j < pointArray2.length; j++) {
+        let d1 = JSON.parse(pointArray2[j]);
+        if (j< pointArray2.length-1){
+            let afterJ = pointArray2[j+1];
+            let d2 = JSON.parse(afterJ);
+            if (Math.abs(d1.xr-d2.xr)>=0.15){
+                filterPoints.push(pointArray2[j]);
+            }
+        }
+
+        if ((pointArray2.length-3)<= j && j<= (pointArray2.length-1)){
+            filterPoints.push(pointArray2[j]);
+        }
+    }
+    console.log("filterPoints.length = "+filterPoints.length);
+   // console.log("filterPoints.length = "+filterPoints);
+    /*每秒播放时间*/
+    var playTime;
+
+    if (filterPoints.length<= 40){
+        playTime =  8000/filterPoints.length;
+    } else {
+        playTime =  10000/filterPoints.length;
+    }
     let i=0;
     let interval = setInterval(function () {
         let data;
-        data = JSON.parse(pointArray2[i]);
+        data = JSON.parse(filterPoints[i]);
         fun.dispose(data);
         showSpeed(data);
         i++;
        // console.log("index="+i+"data =" +pointArray2[i]);
-        if (i === pointArray2.length-1){
+        if (i === filterPoints.length-1){
           clearInterval(interval);
           //alert("播放结束")
         }
-    },25);
+    },playTime);
 
     function showSpeed(data) {
         let $spd = $("#spd");
