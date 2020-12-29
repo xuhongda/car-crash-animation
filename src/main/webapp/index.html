@@ -503,35 +503,81 @@
     });*/
 
    /*过滤点*/
+    var startPoint;
+    var endPoint;
     var  filterPoints = [];
     for (let j = 0; j < pointArray2.length; j++) {
         let d1 = JSON.parse(pointArray2[j]);
         if (j< pointArray2.length-1){
             let afterJ = pointArray2[j+1];
             let d2 = JSON.parse(afterJ);
-            if (Math.abs(d1.xr-d2.xr)>=0.15){
+            if ((d1.xr-d2.xr)>=0.10){
                 filterPoints.push(pointArray2[j]);
             }
-        }
+            /*航向角变化突变认为是开始碰撞点*/
+            if ((d1.xr-d2.xr)>=10){
+                startPoint = pointArray2[j];
+            }
 
+            if ((d1.xr-d2.xr)<=0.10){
+              endPoint = pointArray2[j];
+            }
+        }
+        /*保留最后几个点*/
         if ((pointArray2.length-3)<= j && j<= (pointArray2.length-1)){
             filterPoints.push(pointArray2[j]);
         }
     }
     console.log("filterPoints.length = "+filterPoints.length);
-   // console.log("filterPoints.length = "+filterPoints);
+    console.log("filterPoints.length = "+filterPoints);
     /*每秒播放时间*/
     var playTime;
 
     if (filterPoints.length<= 40){
         playTime =  8000/filterPoints.length;
     } else {
-        playTime =  10000/filterPoints.length;
+        playTime =  8000/filterPoints.length;
     }
     let i=0;
+
     let interval = setInterval(function () {
-        let data;
-        data = JSON.parse(filterPoints[i]);
+        let data = JSON.parse(filterPoints[i]);
+        let num;
+        /*到达疑似碰撞点 调整播放速度*/
+        if (startPoint === filterPoints[i]){
+            clearInterval(interval);
+            num = i;
+            let playTime2 = 500;
+           // alert("到达碰撞点："+500);
+            let interval2 =setInterval(function () {
+                let data2 = JSON.parse(filterPoints[i]);
+                fun.dispose(data2);
+                showSpeed(data2);
+                i++;
+                /*5个点后，更换速度*/
+                if (num+5 === i) {
+
+                    clearInterval(interval2);
+                    let playTime3 =  8000/filterPoints.length;
+                   // alert(playTime3);
+                    let interval3 = setInterval(function () {
+                        let data3 = JSON.parse(filterPoints[i]);
+                        fun.dispose(data3);
+                        showSpeed(data3);
+                        i++;
+                        if (i === filterPoints.length-1){
+                            clearInterval(interval3);
+                        }
+                    },playTime3);
+                }
+
+                if (i === filterPoints.length-1){
+                    clearInterval(interval2);
+                }
+            },playTime2)
+        }
+
+
         fun.dispose(data);
         showSpeed(data);
         i++;
