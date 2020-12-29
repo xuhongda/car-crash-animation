@@ -3,6 +3,7 @@ package com.dina.controller;
 
 import com.dina.utils.Config;
 import com.dina.utils.HttpUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author xuhongda on 2020/12/29
@@ -41,7 +41,7 @@ public class GetCarCrashPointController extends HttpServlet {
             map2.put("mapType","mapType");
             map.put("params",map2);
 
-            Map<String,String> map3 = new HashMap<>();
+            Map<String,String> map3 = new HashMap<>(10);
             map3.put("userName","foshan@yxgl");
             map3.put("password","");
             map3.put("appName","");
@@ -54,8 +54,9 @@ public class GetCarCrashPointController extends HttpServlet {
             map3.put("deptId","");
 
             map.put("auth",map3);
-
-            String result = HttpUtil.doPost(map, Config.getConfig("API_URl"));
+            ObjectMapper mapper = new ObjectMapper();
+            String params = mapper.writeValueAsString(map);
+            String result = HttpUtil.doPost(params, Config.getConfig("API_URl"));
             log.info("result = {}",result);
             //写回去
             resp.setContentType("text/html;charset=utf-8");

@@ -2,6 +2,7 @@ package com.dina.controller;
 
 import com.dina.utils.Config;
 import com.dina.utils.HttpUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +33,9 @@ public class CarCrashController extends HttpServlet {
             Map<String,String> map = new HashMap<>(1);
             map.put("key",deviceId);
             try{
-                String result = HttpUtil.doPost(map, Config.getConfig("API_URl"));
+                ObjectMapper mapper = new ObjectMapper();
+                String params = mapper.writeValueAsString(map);
+                String result = HttpUtil.doPost(params, Config.getConfig("API_URl"));
                 log.info("point = {}",result);
                 //写回去
                 response.setContentType("text/html;charset=utf-8");
