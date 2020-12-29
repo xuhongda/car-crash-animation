@@ -1,15 +1,15 @@
 package com.dina.controller;
 
+import com.dina.utils.Config;
+import com.dina.utils.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author xuhongda on 2020/12/24
@@ -20,11 +20,11 @@ import java.util.Properties;
 @WebServlet("/carCrash")
 public class CarCrashController extends HttpServlet {
 
-    private Properties properties = new Properties();
 
     private Logger log = LoggerFactory.getLogger(CarCrashController.class);
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         String deviceId = request.getParameter("deviceId");
         if (deviceId != null && !"".equals(deviceId)){
@@ -32,7 +32,7 @@ public class CarCrashController extends HttpServlet {
             Map<String,String> map = new HashMap<>(1);
             map.put("key",deviceId);
             try{
-                String result = HttpUtil.doPost(map, Config.getConfig("pointListUrl"));
+                String result = HttpUtil.doPost(map, Config.getConfig("API_URl"));
                 log.info("point = {}",result);
                 //写回去
                 response.setContentType("text/html;charset=utf-8");

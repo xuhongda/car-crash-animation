@@ -1,9 +1,10 @@
 package com.dina.controller;
 
 
+import com.dina.utils.Config;
+import com.dina.utils.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +22,11 @@ import java.util.Properties;
 @WebServlet("/getCarCrashPoint")
 public class GetCarCrashPointController extends HttpServlet {
 
-    private Properties properties = new Properties();
 
     private Logger log = LoggerFactory.getLogger(GetCarCrashPointController.class);
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         String deviceId = req.getParameter("deviceId");
         String eventLogId = req.getParameter("eventLogId");
 
@@ -55,12 +55,11 @@ public class GetCarCrashPointController extends HttpServlet {
 
             map.put("auth",map3);
 
-            String result = HttpUtil.doPost(map,Config.getConfig("crashPointUrl"));
+            String result = HttpUtil.doPost(map, Config.getConfig("API_URl"));
             log.info("result = {}",result);
             //写回去
             resp.setContentType("text/html;charset=utf-8");
             resp.getWriter().println(result);
-
 
         }else {
             log.warn("deviceId is null can't get crash data!");

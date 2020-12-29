@@ -14,7 +14,7 @@
     <fileSets>
         <!-- 从目标目录拷贝文件去压缩 -->
         <fileSet>
-            <directory>target/car_crash</directory>
+            <directory>target/car_crash_cp001</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
 

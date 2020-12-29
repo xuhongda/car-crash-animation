@@ -1,4 +1,4 @@
-package com.dina.controller;
+package com.dina.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
