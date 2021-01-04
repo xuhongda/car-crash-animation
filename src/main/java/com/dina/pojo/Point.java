@@ -25,24 +25,40 @@ public class Point {
     "zr": 1.3,
     "xr": 279.3
 }*/
-
+    private String collisionAngle;
+    private String collisionType;
     private String type;
     private String vid;
     private String did;
-    private String lng;
-    private String lat;
-    private String dir;
-    private String spd;
+    private Double lng;
+    private Double lat;
+    private Double dir;
+    private Double spd;
     private String t;
     private String s;
-    private String ts;
-    private String xa;
-    private String ya;
-    private String za;
-    private String xr;
-    private String yr;
-    private String zr;
+    private Double ts;
+    private Double xa;
+    private Double ya;
+    private Double za;
+    private Double xr;
+    private Double yr;
+    private Double zr;
 
+    public String getCollisionAngle() {
+        return collisionAngle;
+    }
+
+    public void setCollisionAngle(String collisionAngle) {
+        this.collisionAngle = collisionAngle;
+    }
+
+    public String getCollisionType() {
+        return collisionType;
+    }
+
+    public void setCollisionType(String collisionType) {
+        this.collisionType = collisionType;
+    }
 
     public String getType() {
         return type;
@@ -68,35 +84,35 @@ public class Point {
         this.did = did;
     }
 
-    public String getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public String getDir() {
+    public Double getDir() {
         return dir;
     }
 
-    public void setDir(String dir) {
+    public void setDir(Double dir) {
         this.dir = dir;
     }
 
-    public String getSpd() {
+    public Double getSpd() {
         return spd;
     }
 
-    public void setSpd(String spd) {
+    public void setSpd(Double spd) {
         this.spd = spd;
     }
 
@@ -116,59 +132,59 @@ public class Point {
         this.s = s;
     }
 
-    public String getTs() {
+    public Double getTs() {
         return ts;
     }
 
-    public void setTs(String ts) {
+    public void setTs(Double ts) {
         this.ts = ts;
     }
 
-    public String getXa() {
+    public Double getXa() {
         return xa;
     }
 
-    public void setXa(String xa) {
+    public void setXa(Double xa) {
         this.xa = xa;
     }
 
-    public String getYa() {
+    public Double getYa() {
         return ya;
     }
 
-    public void setYa(String ya) {
+    public void setYa(Double ya) {
         this.ya = ya;
     }
 
-    public String getZa() {
+    public Double getZa() {
         return za;
     }
 
-    public void setZa(String za) {
+    public void setZa(Double za) {
         this.za = za;
     }
 
-    public String getXr() {
+    public Double getXr() {
         return xr;
     }
 
-    public void setXr(String xr) {
+    public void setXr(Double xr) {
         this.xr = xr;
     }
 
-    public String getYr() {
+    public Double getYr() {
         return yr;
     }
 
-    public void setYr(String yr) {
+    public void setYr(Double yr) {
         this.yr = yr;
     }
 
-    public String getZr() {
+    public Double getZr() {
         return zr;
     }
 
-    public void setZr(String zr) {
+    public void setZr(Double zr) {
         this.zr = zr;
     }
 
@@ -179,19 +195,19 @@ public class Point {
                 "type='" + type + '\'' +
                 ", vid='" + vid + '\'' +
                 ", did='" + did + '\'' +
-                ", lng='" + lng + '\'' +
-                ", lat='" + lat + '\'' +
-                ", dir='" + dir + '\'' +
-                ", spd='" + spd + '\'' +
+                ", lng=" + lng +
+                ", lat=" + lat +
+                ", dir=" + dir +
+                ", spd=" + spd +
                 ", t='" + t + '\'' +
                 ", s='" + s + '\'' +
-                ", ts='" + ts + '\'' +
-                ", xa='" + xa + '\'' +
-                ", ya='" + ya + '\'' +
-                ", za='" + za + '\'' +
-                ", xr='" + xr + '\'' +
-                ", yr='" + yr + '\'' +
-                ", zr='" + zr + '\'' +
+                ", ts=" + ts +
+                ", xa=" + xa +
+                ", ya=" + ya +
+                ", za=" + za +
+                ", xr=" + xr +
+                ", yr=" + yr +
+                ", zr=" + zr +
                 '}';
     }
 }

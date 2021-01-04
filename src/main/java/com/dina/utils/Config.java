@@ -29,6 +29,8 @@ public class Config {
         }catch (Exception e){
             log.info("exception = " ,e);
         }
+        String property = properties.getProperty(name);
+        log.info(name+" = {}",property);
         return properties.getProperty(name);
     }
 }

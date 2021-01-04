@@ -1,5 +1,5 @@
 <assembly>
-    <id>bin</id>
+    <id>bin_cp001</id>
     <formats>
         <format>tar.gz</format>
     </formats>
@@ -14,7 +14,7 @@
     <fileSets>
         <!-- 从目标目录拷贝文件去压缩 -->
         <fileSet>
-            <directory>target/car_crash_cp001</directory>
+            <directory>target/car</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>
 

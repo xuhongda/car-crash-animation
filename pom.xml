@@ -47,7 +47,7 @@
 
 
     <build>
-        <finalName>car_crash_cp001</finalName>
+        <finalName>car</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
