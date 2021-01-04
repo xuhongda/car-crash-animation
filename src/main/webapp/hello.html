@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hello</title>
+    <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+    <script src="js/lio/axios.min.js"></script>
+    <script src="js/lio/three.min.js"></script>
+    <script src="js/lio/OrbitControls.js"></script>
+    <script src="js/lio/GLTFLoader.js"></script>
+    <script src="js/lio/OBJLoader.js"></script>
+    <script src="js/lio/MTLLoader.js"></script>
+    <script src="js/lio/FBXLoader.js"></script>
+    <script src="js/lio/jquery-2.2.4.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            background: url(images/back_img.jpg) no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .angle_BigBox {
+            z-index: 1;
+            width: 30%;
+            min-width: 350px;
+            height: 100px;
+            position: fixed;
+            left: 50%;
+            top: 20%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            display: flexbox;
+            justify-content: space-around;
+        }
+
+
+        .show_car {
+            z-index: 1;
+            width: 10%;
+            min-width: 350px;
+            height: 100px;
+            position: fixed;
+            left: 80%;
+            top: 40%;
+            justify-content: space-around;
+        }
+
+        .angle_BigBox .angle_Box {
+            display: flex;
+            display: flexbox;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .angle_Box span {
+            color: #000000;
+        }
+
+        .angle_Box div {
+            width: 70px;
+            margin-top: 10px;
+            line-height: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.6);
+            text-align: center;
+            font-size: 17px;
+            color: #85ff01;
+            border-radius: 5px;
+        }
+
+        .box {
+            background-color: #fff;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            /* display: none; */
+        }
+
+        #biasBtn {
+            width: 50px;
+            height: 50px;
+            background-color: #000000;
+            color: #fff;
+            border-radius: 50%;
+        }
+
+    </style>
+    <link href="images/car.png" rel="shortcut icon">
+</head>
+
+<body>
+<div class='box'>
+    <!-- y<input type="text" id='y'><br>
+    x<input type="text" id='x'><br>
+    z<input type="text" id='z'><br>
+    g<input type="text" id='gps'><br> -->
+
+
+    <!--  <button id='biasBtn'>校准</button>-->
+</div>
+
+<div class='angle_BigBox'>
+    <div class='angle_Box'>
+            <span>
+               俯仰(Pitch)
+            </span>
+        <div id='X_axle'>
+            0°
+        </div>
+    </div>
+    <div class='angle_Box'>
+            <span>
+              航向(Yaw)
+            </span>
+        <div id='Y_axle'>
+            0°
+        </div>
+    </div>
+    <div class='angle_Box'>
+            <span>
+               横滚(Roll)
+            </span>
+        <div id='Z_axle'>
+            0°
+        </div>
+    </div>
+
+    <div class='angle_Box'>
+            <span>
+                速度(speed)
+            </span>
+        <div id='spd'>
+            0
+        </div>
+    </div>
+
+</div>
+
+<div class="show_car" id="show_car">
+    <!-- <img src="images/car004.png"  style="height: 200px;width: 110px" alt="车碰撞图">-->
+</div>
+
+</body>
+<script type="module" src="js/index.js"></script>
+<script type="module">
+    import * as fun from './js/function.js'
+    /*
+        let vehicleIds = fun.getQueryVariable('vid') || "20081118250480005" // ObjId
+        let userId = 'admin' + Math.ceil(Math.random() * 10) + Math.ceil(Math.random() * 10) + Math.ceil(Math.random() * 10) //随机拼接的 用户ID*/
+
+    var eventLogId = getUrlParam('eventLogId');
+    //   var eventType = getUrlParam('eventType');
+    var pointArray = [];
+    /*获取该deviceId下碰撞点集合*/
+    $.ajax({
+        url: "./hello",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+
+
+            console.log("point  = " + data);
+            console.log("point detail = " + data.detail);
+            console.log("point segTrackData = " + data.detail.segTrackData);
+            console.log("point pointList = " + data.detail.segTrackData.pointList);
+
+
+            let deviceId = data.detail.deviceId;
+            let vehicleId = data.detail.vehicleId;
+            let eventType = data.detail.eventType;
+            var pointList = data.detail.segTrackData.pointList;
+
+            for (let i = 0; i < pointList.length; i++) {
+                console.log(i + pointList[i])
+                /*{
+                   "type": "GPS",
+                   "vid": "20042516273342108",
+                   "did": "47074800010",
+                   "lng": 114.07,
+                   "lat": 22.55,
+                   "dir": 0,
+                   "spd": 15,
+                   "t": "2020-12-23 17:25:30",
+                   "s": 1,
+                   "ts": 1608715530000,
+                   "xa": 0.009,
+                   "ya": -0.019,
+                   "za": -9.731,
+                   "yr": -0.2,
+                   "zr": 1.3,
+                   "xr": 279.3
+               }*/
+                pointArray[i] = {
+                    "type": "GPS",
+                    "vid": vehicleId,
+                    "did": deviceId,
+                    "lng": pointList[i].longitude,
+                    "lat": pointList[i].latitude,
+                    "dir": pointList[i].direction,
+                    "spd": pointList[i].speed,
+                    "t": pointList[i].time,
+                    "s": 1,
+                    //  "ts": 1608715530000,
+                    "xa": pointList[i].vehicleAccForward,
+                    "ya": pointList[i].vehicleAccSide,
+                    "za": pointList[i].vehicleAccVerticle,
+                    "xr": pointList[i].vehicleYawAngle,
+                    "yr": pointList[i].vehicleBankAngle,
+                    "zr": pointList[i].vehiclePitchAngle,
+                };
+            }
+
+            // alert(eventType)
+            if (eventType === 56) {
+                let collisionAngle = data.detail.collisionAngle;
+                //alert(collisionAngle);
+                // var collisionType = pointArray[0].collisionType;
+                let showCar = $("#show_car");
+                showCar.empty();
+                let carImg;
+                if (0 <= collisionAngle && collisionAngle < 45) {
+                    carImg = $('<img src="images/car001.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (45 <= collisionAngle && collisionAngle < 90) {
+                    carImg = $('<img src="images/car002.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (90 <= collisionAngle && collisionAngle < 135) {
+                    carImg = $('<img src="images/car003.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (135 <= collisionAngle && collisionAngle < 180) {
+                    carImg = $('<img src="images/car004.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (-45 <= collisionAngle && collisionAngle < 0) {
+                    carImg = $('<img src="images/car005.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (-90 <= collisionAngle && collisionAngle < -45) {
+                    carImg = $('<img src="images/car006.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (-135 <= collisionAngle && collisionAngle < -90) {
+                    carImg = $('<img src="images/car007.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+
+                } else if (-180 <= collisionAngle && collisionAngle < -135) {
+                    carImg = $('<img src="images/car008.png"  style="height: 200px;width: 110px" alt="车碰撞图">');
+                }
+                carImg.appendTo(showCar);
+            }
+            //动画
+            start(pointArray);
+        }
+    });
+
+
+    function start(pointArray2) {
+        /*过滤点*/
+        var startPoint;
+        var endPoint;
+        var filterPoints = [];
+        for (let j = 0; j < pointArray2.length; j++) {
+            let d1 = pointArray2[j];
+            if (j < pointArray2.length - 1) {
+                let d2 = pointArray2[j + 1];
+                if ((d1.xr - d2.xr) >= 0.10) {
+                    filterPoints.push(pointArray2[j]);
+                }
+                /*航向角变化突变认为是开始碰撞点*/
+                if ((d1.xr - d2.xr) >= 10) {
+                    startPoint = pointArray2[j];
+                }
+
+                if ((d1.xr - d2.xr) <= 0.10) {
+                    endPoint = pointArray2[j];
+                }
+            }
+            /*保留最后几个点*/
+            if ((pointArray2.length - 3) <= j && j <= (pointArray2.length - 1)) {
+                filterPoints.push(pointArray2[j]);
+            }
+        }
+        console.log("filterPoints.length = " + filterPoints.length);
+        console.log("filterPoints.length = " + filterPoints);
+
+        /*每秒播放时间*/
+        var playTime;
+
+        if (filterPoints.length <= 40) {
+            playTime = 8000 / filterPoints.length;
+        } else {
+            playTime = 8000 / filterPoints.length;
+        }
+        let i = 0;
+
+        let interval = setInterval(function () {
+            let data = filterPoints[i];
+            let num;
+            /*到达疑似碰撞点 调整播放速度*/
+            if (startPoint === filterPoints[i]) {
+                clearInterval(interval);
+                num = i;
+                let playTime2 = 500;
+                // alert("到达碰撞点："+500);
+                let interval2 = setInterval(function () {
+                    let data2 = filterPoints[i];
+                    fun.dispose(data2);
+                    showSpeed(data2);
+                    i++;
+                    /*5个点后，更换速度*/
+                    if (num + 5 === i) {
+
+                        clearInterval(interval2);
+                        let playTime3 = 8000 / filterPoints.length;
+                        // alert(playTime3);
+                        let interval3 = setInterval(function () {
+                            let data3 = filterPoints[i];
+                            fun.dispose(data3);
+                            showSpeed(data3);
+                            i++;
+                            if (i === filterPoints.length - 1) {
+                                clearInterval(interval3);
+                            }
+                        }, playTime3);
+                    }
+
+                    if (i === filterPoints.length - 1) {
+                        clearInterval(interval2);
+                    }
+                }, playTime2)
+            }
+
+
+            fun.dispose(data);
+            showSpeed(data);
+            i++;
+            // console.log("index="+i+"data =" +pointArray2[i]);
+            if (i === filterPoints.length - 1) {
+                clearInterval(interval);
+                //alert("播放结束")
+            }
+        }, playTime);
+    }
+
+
+    function showSpeed(data) {
+        let $spd = $("#spd");
+        $spd.html(data.spd + "KM/H");
+    }
+
+    //获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+
+    // getToken() //接口调用
+
+
+    /* function getToken() {
+         axios({
+        url: '/threeDcarApi/pos?userId=' + userId + '&vehicleIds=' + vehicleIds,
+        method: 'GET',
+    })
+    .then(function (response) {
+        fun.wsInit(response, userId)
+
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+     }*/
+
+
+</script>
+
+</html>
